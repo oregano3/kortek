@@ -1,75 +1,58 @@
-# Yew Trunk Template
+# Development
 
-This is a fairly minimal template for a Yew app that's built with [Trunk].
+Your new jumpstart project includes basic organization with an organized `assets` folder and a `components` folder.
+If you chose to develop with the router feature, you will also have a `views` folder.
 
-## Usage
-
-For a more thorough explanation of Trunk and its features, please head over to the [repository][trunk].
-
-### Installation
-
-If you don't already have it installed, it's time to install Rust: <https://www.rust-lang.org/tools/install>.
-The rest of this guide assumes a typical Rust installation which contains both `rustup` and Cargo.
-
-To compile Rust to WASM, we need to have the `wasm32-unknown-unknown` target installed.
-If you don't already have it, install it with the following command:
-
-```bash
-rustup target add wasm32-unknown-unknown
+```
+project/
+├─ assets/ # Any assets that are used by the app should be placed here
+├─ src/
+│  ├─ main.rs # The entrypoint for the app. It also defines the routes for the app.
+│  ├─ components/
+│  │  ├─ mod.rs # Defines the components module
+│  │  ├─ hero.rs # The Hero component for use in the home page
+│  │  ├─ echo.rs # The echo component uses server functions to communicate with the server
+│  ├─ views/ # The views each route will render in the app.
+│  │  ├─ mod.rs # Defines the module for the views route and re-exports the components for each route
+│  │  ├─ blog.rs # The component that will render at the /blog/:id route
+│  │  ├─ home.rs # The component that will render at the / route
+├─ Cargo.toml # The Cargo.toml file defines the dependencies and feature flags for your project
 ```
 
-Now that we have our basics covered, it's time to install the star of the show: [Trunk].
-Simply run the following command to install it:
+### Automatic Tailwind (Dioxus 0.7+)
 
-```bash
-cargo install trunk wasm-bindgen-cli
+As of Dioxus 0.7, there no longer is a need to manually install tailwind. Simply `dx serve` and you're good to go!
+
+Automatic tailwind is supported by checking for a file called `tailwind.css` in your app's manifest directory (next to Cargo.toml). To customize the file, use the dioxus.toml:
+
+```toml
+[application]
+tailwind_input = "my.css"
+tailwind_output = "assets/out.css"
 ```
 
-That's it, we're done!
+### Tailwind Manual Install
 
-### Running
+To use tailwind plugins or manually customize tailwind, you can can install the Tailwind CLI and use it directly.
 
-```bash
-trunk serve
-```
-
-Rebuilds the app whenever a change is detected and runs a local server to host it.
-
-There's also the `trunk watch` command which does the same thing but without hosting it.
-
-### Release
+1. Install npm: https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
+2. Install the Tailwind CSS CLI: https://tailwindcss.com/docs/installation/tailwind-cli
+3. Run the following command in the root of the project to start the Tailwind CSS compiler:
 
 ```bash
-trunk build --release
+npx @tailwindcss/cli -i ./input.css -o ./assets/tailwind.css --watch
 ```
 
-This builds the app in release mode similar to `cargo build --release`.
-You can also pass the `--release` flag to `trunk serve` if you need to get every last drop of performance.
+### Serving Your App
 
-Unless overwritten, the output will be located in the `dist` directory.
+Run the following command in the root of your project to start developing with the default platform:
 
-## Using this template
+```bash
+dx serve --platform web
+```
 
-There are a few things you have to adjust when adopting this template.
+To run for a different platform, use the `--platform platform` flag. E.g.
+```bash
+dx serve --platform desktop
+```
 
-### Remove example code
-
-The code in [src/main.rs](src/main.rs) specific to the example is limited to only the `view` method.
-There is, however, a fair bit of Sass in [index.scss](index.scss) you can remove.
-
-### Update metadata
-
-Update the `version`, `description` and `repository` fields in the [Cargo.toml](Cargo.toml) file.
-The [index.html](index.html) file also contains a `<title>` tag that needs updating.
-
-
-Finally, you should update this very `README` file to be about your app.
-
-### License
-
-The template ships with both the Apache and MIT license.
-If you don't want to have your app dual licensed, just remove one (or both) of the files and update the `license` field in `Cargo.toml`.
-
-There are two empty spaces in the MIT license you need to fill out: `` and `Oregano <email@oregano.one>`.
-
-[trunk]: https://github.com/thedodd/trunk
